@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // 경로 기준이 프로젝트 루트가 되도록 설정 (컴포넌트 import 자동완성을 도움)
+    "paths": {
+      "@/*": ["src/*"] // @는 src 폴더로 매핑
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
