@@ -1,12 +1,14 @@
 <script setup>
-import { reactive } from 'vue';
+// p.175
+import { reactive, onMounted } from 'vue';
 import { HttpService } from '@/services/HttpService';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 // 스토리지 서비스의 객체(인스턴스) 생성
 const httpService = new HttpService();
 // 라우터 객체
 const router = useRouter();
+const route = useRoute();
 // 반응형 상태
 const state = reactive({
   memo: {
@@ -23,6 +25,13 @@ const submit = () => {
   // 메인 화면으로 이동
   router.push({ path: '/' });
 };
+
+onMounted(() => {
+  if (route.params.id) {
+    // 값이 있다면 item클릭, 없다면 [+추가하기] 버튼 클릭
+    
+  }
+});
 </script>
 
 <template>

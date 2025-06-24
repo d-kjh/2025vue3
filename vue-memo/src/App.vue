@@ -15,7 +15,7 @@
       </main>
       <!-- footer -->
       <footer class="pt-4 mt-4 border-top">
-        &copy; 2024. Memo. All rights reserved.
+        &copy; 2025. Memo. All rights reserved.
       </footer>
     </div>
   </div>
