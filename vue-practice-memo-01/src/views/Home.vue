@@ -31,6 +31,17 @@ const search = () => {
   };
   findAll(params);
 };
+
+const remove = async (id) => {
+  console.log(id);
+  if (confirm('삭제할거임?')) {
+    const params = { id };
+    const data = await httpService.deleteById(params);
+    if (data.resultData === 1) {
+      search();
+    }
+  }
+};
 </script>
 
 <template>

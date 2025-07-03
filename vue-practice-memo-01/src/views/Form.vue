@@ -21,17 +21,24 @@ onMounted(() => {
     state.memo = JSON.parse(passData);
   }
 });
-
 const procSubmit = async () => {
   const jsonBody = {
     title: state.memo.title,
     content: state.memo.content,
   };
-  const data = await httpService.save(jsonBody);
 
+  let data = null;
+  let path = '/';
+  if (state.memo.id) {
+    path = `/memos/${state.memo.id}`;
+    jsonBody.id = state.memo.id;
+    data = await httpService.modify(jsonBody);
+  } else {
+    data = await httpService.save(jsonBody);
+  }
   if (data.resultData === 1) {
     // 주소가 "/"으로 라우팅 처리 하고 싶다.
-    router.push({ path: '/' });
+    router.push({ path });
   } else {
     alert(data.resultMessage);
   }

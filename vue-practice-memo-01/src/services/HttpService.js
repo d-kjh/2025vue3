@@ -17,6 +17,16 @@ class HttpService {
     const res = await axios.get(`/${id}`);
     return res.data;
   }
+
+  async modify(jsonBody) {
+    const res = await axios.put('', jsonBody);
+    return res.data;
+  }
+
+  async deleteById(params) {
+    const res = await axios.delete('', { params });
+    return res.data;
+  }
 }
 
 export default new HttpService();
