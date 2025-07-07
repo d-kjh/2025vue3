@@ -16,7 +16,7 @@ const state = reactive({
 });
 
 const moveForm = () => {
-  const json = JSON.stringify(state.memo);
+  const json = JSON.stringify(state.memo); // 직렬화
   if (confirm('수정 ㄱㄱ?')) {
     router.push({
       path: '/memo_test/add',
