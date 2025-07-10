@@ -14,6 +14,7 @@ onMounted(() => {
 });
 
 const findAll = async (params) => {
+  console.log('params', params);
   const data = await httpService.findAll(params);
   state.memos = data.resultData;
 };

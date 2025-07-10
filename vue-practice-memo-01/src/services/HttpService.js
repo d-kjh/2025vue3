@@ -1,5 +1,5 @@
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:8080/api/memo';
+axios.defaults.baseURL = 'http://localhost:8080/memo_test';
 
 class HttpService {
   // save메소드 구현해주세요

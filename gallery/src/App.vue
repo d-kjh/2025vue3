@@ -13,7 +13,6 @@ const account = useAccountStore();
 const checkAccount = async () => {
   console.log('로그인 체크');
   const res = await check();
-  console.log('res: ', res);
   if (res === undefined || res.status != 200) {
     account.setChecked(false);
     return;
