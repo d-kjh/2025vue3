@@ -1,9 +1,24 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
+import { getOrders } from '@/services/orderService';
 
 const state = reactive({
-    orders: [],
-})
+  orders: [],
+});
+
+const load = async () => {
+  const res = await getOrders();
+  if (res === undefined || res.status !== 200) {
+    alert('오류 발생');
+    return;
+  }
+  state.orders = res.data;
+  console.log('state.orders: ', state.orders);
+};
+
+onMounted(async () => {
+  await load();
+});
 </script>
 
 <template>
@@ -25,7 +40,7 @@ const state = reactive({
             <td class="text-center">{{ state.orders.length - idx }}</td>
             <td>{{ o.name }}</td>
             <td>{{ o.payment === 'card' ? '카드' : '무통장입금' }}</td>
-            <td>{{ o.amoun.toLocaleString() }}원</td>
+            <td>{{ o.amount.toLocaleString() }}원</td>
             <td>{{ o.created.toLocaleString() }}</td>
             <td>
               <router-link :to="`/orders/${o.id}`">자세히 보기</router-link>

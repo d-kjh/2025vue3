@@ -25,6 +25,18 @@ const submit = async () => {
   state.form.itemIds = state.items.map((item) => item.itemId);
   console.log('itemIds', state.form.itemIds);
   const res = await addOrder(state.form);
+  if (res === undefined || res.status !== 200) {
+    alert('에러 발생');
+    return;
+  }
+  const message = ['주문 완'];
+  if (state.form.payment === 'bank') {
+    const price = computedTotalPrice.value.toLocaleString();
+    message.push(`카카오뱅크(123-456789-777 [김주현])로 ${price}원 입금 ㄱㄱ`);
+  }
+
+  alert(message.join('\n'));
+  await router.push('/');
 };
 
 onMounted(async () => {
