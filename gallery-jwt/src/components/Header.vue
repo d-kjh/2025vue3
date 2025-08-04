@@ -1,7 +1,9 @@
 <script setup>
 import { useAccountStore } from '@/stores/account';
 import { logout } from '@/services/accountService';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const account = useAccountStore();
 //로그아웃
 const logoutAccount = async () => {
@@ -12,7 +14,8 @@ const logoutAccount = async () => {
   if (res === undefined || res.status !== 200) {
     return;
   }
-  account.setLoggedIn(false);
+  account.logout();
+  await router.push('/');
 };
 </script>
 
@@ -24,7 +27,7 @@ const logoutAccount = async () => {
           <strong>Gallery</strong>
         </router-link>
         <div class="menus d-flex gap-3">
-          <template v-if="account.state.loggedIn">
+          <template v-if="account.state.isSigned">
             <a @click="logoutAccount()">로그아웃</a>
             <router-link to="/orders">주문 내역</router-link>
             <router-link to="/cart">장바구니</router-link>

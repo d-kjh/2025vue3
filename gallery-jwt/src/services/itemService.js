@@ -1,5 +1,4 @@
-import axios from 'axios';
-axios.defaults.baseURL = '/api/v1';
+import axios from './httpRequester';
 
 export const getItems = () => {
   return axios.get('/item').catch((e) => e.response);

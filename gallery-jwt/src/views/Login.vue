@@ -1,8 +1,10 @@
 <script setup>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAccountStore } from '@/stores/account';
 import { login } from '@/services/accountService';
 
+const accountStore = useAccountStore();
 const router = useRouter();
 
 const state = reactive({
@@ -16,6 +18,8 @@ const submit = async () => {
 
   switch (res.status) {
     case 200:
+      const signedUser = res.data;
+      accountStore.setSignedUser(signedUser);
       await router.push('/');
       break;
     case 404:

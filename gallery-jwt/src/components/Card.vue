@@ -1,12 +1,14 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { addItem } from '@/services/cartService';
 import { useAccountStore } from '@/stores/account';
 import { useRouter } from 'vue-router';
 
+const baseUrl = ref(import.meta.env.VITE_BASE_URL);
+
 const router = useRouter();
 
-const account = useAccountStore();
+const accountStore = useAccountStore();
 // 프로퍼티 객체
 const props = defineProps({
   item: {
@@ -30,19 +32,14 @@ const computedItemDiscountPrice = computed(() => {
 
 // 장바구니에 상품 담기
 const put = async () => {
-  if (!account.state.loggedIn) {
-    alert('니 뭔데?');
-    return;
-  }
   const res = await addItem(props.item.id);
-  if (res === undefined) {
-    alert('서버문제임');
-    return;
-  } else if (res.status === 500) {
-    alert('이미 있음');
-  } else if (confirm('장바구니 ㄱ? or 더 쇼핑 ㄱ?')) {
-    router.push('/cart');
+  if (
+    res.status === 200 &&
+    confirm('장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?')
+  ) {
+    //장바구니 화면으로 라우팅
     console.log('카트 담기 성공!');
+    router.push('/cart');
   }
 };
 </script>
@@ -53,7 +50,7 @@ const put = async () => {
     <span
       class="img"
       :style="{
-        backgroundImage: `url(pic/item/${props.item.imgPath})`,
+        backgroundImage: `url(${baseUrl}/pic/item/${props.item.imgPath})`,
       }"
       :aria-label="`상품 사진(${props.item.name})`"
     ></span>
