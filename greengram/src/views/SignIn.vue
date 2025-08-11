@@ -47,8 +47,9 @@ const submit = async () => {
             placeholder="아이디"
             v-model="state.form.uid"
             not-null-message="아이디는 필수로 입력하셔야 합니다."
-            regexp="^[A-Za-z0-9_]{4,50}$"
-            regexp-message="아이디는 영어, 숫자, 언더바로만 구성되어야 하며 4~50자까지 작성할 수 있습니다." />
+            regexp="^[A-Za-z0-9_]{4,10}$"
+            regexp-message="아이디는 영어, 숫자, 언더바로만 구성되어야 하며 4~10자까지 작성할 수 있습니다."
+          />
           <label for="uid">아이디</label>
         </div>
         <div class="form-floating">
@@ -60,8 +61,9 @@ const submit = async () => {
             v-model="state.form.upw"
             autocomplete="off"
             not-null-message="비밀번호는 필수로 입력하셔야 합니다."
-            regexp="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&amp;*()_+\-=\[\]{};':&quot;\\|,.&lt;&gt;\/?])[A-Za-z\d!@#$%^&amp;*()_+\-=\[\]{};':&quot;\\|,.&lt;&gt;\/?]{10,}$"
-            regexp-message="비밀번호는 영문자, 숫자, 특수기호로 구성되며 10자 이상이어야 합니다." />
+            regexp="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&amp;*()_+\-=\[\]{};':&quot;\\|,.&lt;&gt;\/?])[A-Za-z\d!@#$%^&amp;*()_+\-=\[\]{};':&quot;\\|,.&lt;&gt;\/?]{4,}$"
+            regexp-message="비밀번호는 영문자, 숫자, 특수기호로 구성되며 4자 이상이어야 합니다."
+          />
           <label for="upw">비밀번호</label>
         </div>
         <button class="w-100 h6 btn py-3 btn-primary">로그인</button>
