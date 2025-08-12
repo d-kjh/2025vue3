@@ -26,7 +26,7 @@ export const checkValidation = () => {
     if(result.length > 0) {
       alert(result);
     }
-    return result.length > 0
+    return result.length > 0 // 유효성 문제가 하나라도 있다면 return true
   }
-  return false;
+  return false; // 유효성 문제가 하나도 없으면 return false
 }

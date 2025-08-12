@@ -60,10 +60,9 @@ const getData = async () => {
     const result = res.data.result;
     if (result && result.length > 0) {
       state.list = [...state.list, ...result];
-
-      if (result.length < data.rowPerPage) {
-        state.isFinish = true;
-      }
+    }
+    if (result.length < data.rowPerPage) {
+      state.isFinish = true;
     }
   }
   state.isLoading = false;
@@ -75,15 +74,19 @@ const handlePicChanged = (e) => {
 
 const saveFeed = async () => {
   console.log('state.feed.pics: ', state.feed.pics);
+  const MAX_PIC_COUNT = 10;
   //사진 있는지 확인
   if (state.feed.pics.length === 0) {
     alert('사진을 선택해 주세요.');
     return;
+  } else if (state.feed.pics.length > MAX_PIC_COUNT) {
+    alert(`사진은 ${MAX_PIC_COUNT}장까지 선택 가능합니다.`);
+    return;
   }
 
   const params = {
-    contents: state.feed.contents,
-    location: state.feed.location,
+    contents: state.feed.contents.length === 0 ? null : state.feed.contents,
+    location: state.feed.location.length === 0 ? null : state.feed.location,
   };
 
   const formData = new FormData();
@@ -94,6 +97,10 @@ const saveFeed = async () => {
   for (let i = 0; i < state.feed.pics.length; i++) {
     formData.append('pic', state.feed.pics[i]);
   }
+
+  // formData.append('pic', state.feed.pics[0])
+  // formData.append('pic', state.feed.pics[1])
+  // formData.append('pic', state.feed.pics[2])
 
   const res = await postFeed(formData);
   if (res.status === 200) {
@@ -114,12 +121,19 @@ const saveFeed = async () => {
     };
 
     state.list.unshift(item);
-
+    initInputs();
     modalCloseButton.value.click(); //모달창 닫기
   }
 };
 
+const initInputs = () => {
+  state.feed.contents = '';
+  state.feed.location = '';
+  state.feed.pics = [];
+};
+
 const handleScroll = () => {
+  console.log('스크롤 이벤트');
   if (
     state.isFinish ||
     state.isLoading ||
@@ -128,6 +142,7 @@ const handleScroll = () => {
   ) {
     return;
   }
+  console.log('데이터 가져오기');
   getData();
 };
 </script>
