@@ -111,7 +111,6 @@ const toggleLike = async () => {
       navigation
       :modules="state.modules"
       :pagination="{ clickable: true, dynamicBullets: true }"
-      :scrollbar="{ draggable: true }"
       :slides-per-view="1"
       :space-between="50"
     >

@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="cmtItemCont">
+  <div class="cmtItemCont mt-1">
     <div class="cmtItemProfile">
       <profile-img
         :clsValue="'profile pointer'"
