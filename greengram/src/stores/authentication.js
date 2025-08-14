@@ -1,29 +1,32 @@
-import { reactive } from 'vue'
-import { defineStore } from 'pinia'
-import router from '@/router'
+import { reactive } from 'vue';
+import { defineStore } from 'pinia';
+import router from '@/router';
 
 export const useAuthenticationStore = defineStore(
-    "authentication", 
-    () => {
-        const state = reactive({            
-            signedUser: null,
-            isSigned: false
-        });
+  'authentication',
+  () => {
+    const state = reactive({
+      signedUser: null,
+      isSigned: false,
+    });
 
-        const setSignedUser = val => {
-            state.signedUser = val;
-            state.isSigned = true;
-        }
+    const setSignedUser = (signedUser) => {
+      state.isSigned = true;
+      state.signedUser = signedUser;
+    };
 
-        const signOut = async () => {
-            console.log('signOut 처리')
-            state.signedUser = null;
-            state.isSigned = false;
-            
-            await router.push('/sign-in')
-        }
+    const setSigndUserPic = (pic) => {
+      state.signedUser.pic = pic;
+    };
 
-        return { state, setSignedUser, signOut };
-    }, 
-    { persist: true }
+    const signOut = async () => {
+      console.log('signOut 처리');
+      state.isSigned = false;
+      state.signedUser = null;
+      await router.push('/sign-in');
+    };
+
+    return { state, setSignedUser, setSigndUserPic, signOut };
+  },
+  { persist: true }
 );

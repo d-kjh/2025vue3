@@ -1,4 +1,5 @@
 <script setup>
+import loadingImg from '@/assets/loading.gif';
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { useAuthenticationStore } from '@/stores/authentication';
 import FeedCard from '@/components/FeedCard.vue';
@@ -62,7 +63,7 @@ const getData = async () => {
   if (res.status === 200) {
     const result = res.data.result;
     if (result && result.length > 0) {
-      state.list = [...state.list, ...result];
+      state.list.push(...result);
     }
     if (result.length < data.rowPerPage) {
       state.isFinish = true;
@@ -144,7 +145,9 @@ const initInputs = () => {
         :key="item.feedId"
         :item="item"
       ></feed-card>
-      <p v-if="state.isLoading">Loading...</p>
+      <div v-if="state.isLoading" class="loading display-none">
+        <img :src="loadingImg" />
+      </div>
     </div>
   </section>
   <div

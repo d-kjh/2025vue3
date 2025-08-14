@@ -17,8 +17,8 @@ const messageModal = useMessageModalStore();
 
 <style>
 a {
-  text-decoration: none;
-  color: black;
+  text-decoration: none !important;
+  color: black !important;
 }
 .swiper-wrapper {
   align-items: center;
