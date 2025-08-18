@@ -4,12 +4,18 @@ import ProfileImg from '@/components/ProfileImg.vue';
 import FeedCard from '@/components/FeedCard.vue';
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
+import { useFeedStore } from '@/stores/feed';
 import { useAuthenticationStore } from '@/stores/authentication';
-import { getUserProfile, patchUserProfilePic } from '@/services/userService';
+import {
+  getUserProfile,
+  patchUserProfilePic,
+  deleteUserProfilePic,
+} from '@/services/userService';
 import { postUserFollow, deleteUserFollow } from '@/services/followService';
-import { getFeedList } from '@/services/feedService';
+import { getFeedList, deleteFeed } from '@/services/feedService';
 import { bindEvent } from '@/utils/commonUtils';
 
+const feedStore = useFeedStore();
 const fileInput = ref(null);
 const authenticationStore = useAuthenticationStore();
 const route = useRoute(); //PathVariable 데이터 가져오기 위한 용도
@@ -24,19 +30,7 @@ const state = reactive({
   isMyProfile: false,
   isLoading: false,
   isFinish: false,
-  userProfile: {
-    userId: 0,
-    uid: '',
-    pic: '',
-    nickName: '',
-    createdAt: '',
-    feedCount: 0,
-    allFeedLikeCount: 0,
-    followerCount: 0,
-    followingCount: 0,
-    followState: 0,
-  },
-  list: [],
+  userProfile: null,
 });
 
 const init = (userId) => {
@@ -53,7 +47,7 @@ const init = (userId) => {
     followingCount: 0,
     followState: 0,
   };
-  state.list = [];
+  feedStore.clearList();
 
   data.page = 1;
   data.profileUserId = userId;
@@ -108,7 +102,7 @@ const getFeedData = async () => {
   if (res.status === 200) {
     const result = res.data.result;
     if (result && result.length > 0) {
-      state.list.push(...result);
+      feedStore.addFeedList(result);
     }
     if (result.length < data.rowPerPage) {
       state.isFinish = true;
@@ -117,8 +111,32 @@ const getFeedData = async () => {
   state.isLoading = false;
 };
 
-const removeUserPic = () => {
+const removeUserPic = async () => {
   console.log('프로파일 이미지 삭제');
+
+  const res = await deleteUserProfilePic();
+  if (res.status === 200) {
+    state.userProfile.pic = null;
+    authenticationStore.setSigndUserPic(null);
+  }
+};
+
+//피드 삭제
+const doDeleteFeed = async (feedId, idx) => {
+  if (!confirm('삭제하시겠습니까?')) {
+    return;
+  }
+
+  console.log('feedId:', feedId);
+  console.log('idx:', idx);
+
+  const params = { feed_id: feedId };
+
+  const res = await deleteFeed(params);
+  if (res.status === 200) {
+    //state.list.splice(idx, 1);
+    feedStore.deleteFeedByIdx(idx);
+  }
 };
 
 const onClickProfileImg = () => {
@@ -183,6 +201,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
+  feedStore.clearList();
 });
 
 onBeforeRouteUpdate((to, from) => {
@@ -191,7 +210,6 @@ onBeforeRouteUpdate((to, from) => {
   const toUserId = parseInt(to.params.userId);
   if (toUserId !== data.profileUserId) {
     init(toUserId);
-
     getData();
   }
 });
@@ -279,9 +297,11 @@ onBeforeRouteUpdate((to, from) => {
 
       <div class="item_container mt-3">
         <feed-card
-          v-for="item in state.list"
+          v-for="(item, idx) in feedStore.feedList"
           :key="item.feedId"
           :item="item"
+          :yn-del="true"
+          @on-delete-feed="doDeleteFeed(item.feedId, idx)"
         ></feed-card>
       </div>
 
