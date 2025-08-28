@@ -1,7 +1,7 @@
 <script setup>
 import ProfileImg from '@/components/ProfileImg.vue';
 import FeedContainer from '@/components/FeedContainer.vue';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useFeedStore } from '@/stores/feed';
 import { useAuthenticationStore } from '@/stores/authentication';
@@ -11,6 +11,7 @@ import {
   deleteUserProfilePic,
 } from '@/services/userService';
 import { postUserFollow, deleteUserFollow } from '@/services/followService';
+import { getFeedList, deleteFeed } from '@/services/feedService';
 
 const feedStore = useFeedStore();
 const fileInput = ref(null);
@@ -86,6 +87,24 @@ const removeUserPic = async () => {
   }
 };
 
+//피드 삭제
+const doDeleteFeed = async (feedId, idx) => {
+  if (!confirm('삭제하시겠습니까?')) {
+    return;
+  }
+
+  console.log('feedId:', feedId);
+  console.log('idx:', idx);
+
+  const params = { feed_id: feedId };
+
+  const res = await deleteFeed(params);
+  if (res.status === 200) {
+    //state.list.splice(idx, 1);
+    feedStore.deleteFeedByIdx(idx);
+  }
+};
+
 const onClickProfileImg = () => {
   if (state.isMyProfile) {
     fileInput.value.click();
@@ -143,6 +162,11 @@ const getData = (userId) => {
 
 onMounted(() => {
   getData(route.params.userId);
+  useFeedStore.setKeyword('');
+});
+
+onUnmounted(() => {
+  feedStore.init();
 });
 
 onBeforeRouteUpdate((to, from) => {

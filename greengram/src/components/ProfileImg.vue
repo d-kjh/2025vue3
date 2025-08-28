@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import defaultProfileImg from '@/assets/defaultProfileImg.png';
 import { useAuthenticationStore } from '@/stores/authentication';
+
 const authenticationStore = useAuthenticationStore();
 
 const baseUrl = ref(import.meta.env.VITE_BASE_URL);

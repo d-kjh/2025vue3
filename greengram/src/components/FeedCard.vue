@@ -19,8 +19,8 @@ const authenticationStore = useAuthenticationStore();
 
 const props = defineProps({
   item: {
-    feedId: Number,
-    writerUserId: Number,
+    feedId: String,
+    writerUserId: String,
     writerPic: String,
     writerNm: String,
     location: String,
@@ -42,7 +42,6 @@ const state = reactive({
 });
 
 const toggleLike = async () => {
-  console.log('toggleLike click!');
   const data = { feedId: props.item.feedId };
   const res = await toggleFeedLike(data);
   if (res.status === 200) {
@@ -50,20 +49,6 @@ const toggleLike = async () => {
     state.likeCount = state.isLike ? state.likeCount + 1 : state.likeCount - 1;
   }
 };
-
-// const deleteFeed = async () => {
-//   if(!ynDel || !confirm('삭제하시겠습니까?')) { return; }
-
-//   const params = {
-//     feed_id: props.item.feedId
-//   }
-
-//   const res = await deleteFeed(params);
-//   if(res.status === 200) {
-
-//   }
-
-// }
 </script>
 
 <template>
